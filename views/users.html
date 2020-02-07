@@ -1,0 +1,27 @@
+{{define "head"}}{{end}}
+{{define "content"}}
+{{include "admin/nav"}}
+<table class="table-auto">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>When</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+    {{ range $key, $value := .users }} 
+        <tr>
+            <td class="border px-4 py-2">{{ $value.Email }}</td>
+            <td class="border px-4 py-2">{{ $value.LastUserAgent}}</td>
+            <td class="border px-4 py-2">{{ $value.LastIP}}</td>
+            <td class="border px-4 py-2">{{ $value.LastLoggedInAt}}</td>
+            <td class="border px-4 py-2">{{ $value.CreatedAt }}</td>
+        </tr>
+    {{ end }}
+    </tbody>
+
+</table>
+{{end}}

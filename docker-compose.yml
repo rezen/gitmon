@@ -1,0 +1,79 @@
+version: '3'
+
+services:
+  worker:
+    image: golang:1.12
+    working_dir: /go/src/github.com/rezen/gitmon
+    command: go run cmd/gitmon/worker.go
+    volumes:
+      - ./:/go/src/github.com/rezen/gitmon
+    
+  app:
+    image: golang:1.12
+    working_dir: /go/src/github.com/rezen/gitmon
+    command: go run cmd/gitmon/main.go
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./:/go/src/github.com/rezen/gitmon
+
+  grafana:
+    # admin:admin
+    image: grafana/grafana:5.4.3
+    ports:
+      - 3001:3000 
+    volumes: 
+      - grafana_data:/var/lib/grafana
+  influx:
+    image: influxdb:1.7
+    volumes: 
+      - influxdb_data:/var/lib/influxdb
+    environment: 
+      - INFLUXDB_ADMIN_ENABLED=true
+    ports:
+      - 8086:8086
+      - 8083:8083
+  telegraf:
+    image: telegraf
+    ports:
+      - "8120:8125/udp"
+    volumes:
+      - ./_data/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+
+  redis:
+    image: redis:5.0
+    ports:
+      - "6379:6379"
+  db:
+    image: mysql:8
+    container_name: db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      TZ: America/Los_Angeles
+      MYSQL_USER: "person"
+      MYSQL_PASSWORD: password123
+      MYSQL_ROOT_PASSWORD: password123
+      MYSQL_DATABASE: devdb
+    ports:
+      - "3308:3306"
+    security_opt:
+      - seccomp:unconfined
+
+  
+volumes:
+
+  #shared:
+  #  driver_opts:
+  #    type: none
+  #    device: /home/andres/shared/
+  #    o: bind
+
+  mysql_data:
+    driver: local
+
+  influxdb_data:
+    driver: local
+
+  grafana_data:
+    driver: local

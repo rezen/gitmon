@@ -1,0 +1,85 @@
+{{define "head"}}{{end}}
+{{define "content"}}
+{{include "admin/nav"}}
+{{.worker_heartbeat}}
+
+{{ if  .worker_is_alive }}
+    <div>
+        <progress max="100" style="display: block;"></progress>
+        <strong>{{ .worker_process }}</strong>
+    </div>
+{{ end }}
+<h4>Queues</h4>
+<table class="table-auto">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Count</th>
+                <th>Latency</th>
+            </tr>
+        </thead>
+
+        <tbody>
+    {{ range $key, $value := .queues }} 
+        <tr>            
+            <td class="border px-4 py-2">{{ $value.JobName }}</td>
+            <td class="border px-4 py-2">{{ $value.Count }}</td>
+            <td class="border px-4 py-2">{{ $value.Latency }}</td>
+        </tr>
+    {{ end }}
+    </tbody>
+
+</table>
+
+<h4>Pools</h4>
+<table class="table-auto">
+    <thead>
+        <tr>
+            <th>PoolID</th>
+            <th>StartedAt</th>
+            <th>Heartbeat</th>
+            <th>JobNames</th>
+            <th>Concurrency</th>
+            <th>Host</th>
+            <th>Pid</th>
+            <th># Workers</th>
+        </tr>
+    </thead>
+    <tbody>
+{{ range $key, $value := .pools }} 
+    <tr>            
+        <td class="border px-4 py-2">{{ $value.WorkerPoolID }}</td>
+        <td class="border px-4 py-2">{{ $value.StartedAt }}</td>
+        <td class="border px-4 py-2">{{ $value.HeartbeatAt }}</td>
+        <td class="border px-4 py-2">{{ $value.JobNames }}</td>
+        <td class="border px-4 py-2">{{ $value.Concurrency }}</td>
+        <td class="border px-4 py-2">{{ $value.Host }}</td>
+        <td class="border px-4 py-2">{{ $value.Pid }}</td>
+        <td class="border px-4 py-2">{{ len $value.WorkerIDs }}</td>
+
+    </tr>
+{{ end }}
+</tbody>
+
+</table>
+
+<h4>observations</h4>
+<table class="table-auto">
+
+
+    <tbody>
+{{ range $key, $value := .observations }} 
+    <tr>            
+        <td class="border px-4 py-2">{{ $value.WorkerID }}</td>
+        <td class="border px-4 py-2">{{ $value.IsBusy }}</td>
+        <td class="border px-4 py-2">{{ $value.JobName }}</td>
+        <td class="border px-4 py-2">{{ $value.JobID }}</td>
+        <td class="border px-4 py-2">{{ $value.StartedAt }}</td>
+        <td class="border px-4 py-2">{{ $value.ArgsJSON }}</td>
+    </tr>
+{{ end }}
+</tbody>
+
+</table>
+
+{{end}}

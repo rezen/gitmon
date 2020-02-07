@@ -1,0 +1,73 @@
+{{define "head"}}
+{{end}}
+{{define "content"}}
+{{include "admin/nav"}}
+<div class="rounded overflow-hidden shadow-lg mt-2">
+
+        <form method="POST" action="/admin/sites_bulk" class="px-6 py-4">
+            <div class="flex flex-wrap -mx-3 mb-6">
+                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label>Urls</label>
+            <!-- @todo use async to in parallel post sites -->
+            <textarea class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="urls"></textarea>
+
+            </div>
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label>Tags</label>
+            <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  type="text" name="tags" />
+            </div>
+            </div>
+            <input type="hidden" name="csrf" value="{{.csrf}}" />
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" type="submit">Add</button>
+        </form>
+        <form method="POST" action="/admin/sites" class="px-6 py-4">
+            <div class="flex flex-wrap -mx-3 mb-6">
+                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label>Url</label>
+            <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="url" placeholder="http://example.com" />
+            </div>
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label>Tags</label>
+            <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  type="text" name="tags" />
+            </div>
+            </div>
+            <input type="hidden" name="csrf" value="{{.csrf}}" />
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" type="submit">Add</button>
+        </form>
+
+        </div>
+    
+<table class="table-auto">
+    {{ range $key, $value := .sites }} 
+        <tr>
+            <td class="border px-4 py-2">{{ $value.ID }}</td>
+            <td class="border px-4 py-2">
+                <form method="POST" action="/admin/sites/{{ $value.ID }}">
+                    <input type="hidden" name="_method" value="PUT" /> 
+                    <input type="checkbox" name="is_enabled" value="1" {{ if $value.IsEnabled }}checked{{ end }}/>
+                    <input type="hidden" name="csrf" value="{{$.csrf}}" />
+                </form>
+            </td>
+
+            <td class="border px-4 py-2">{{ $value.Url }}</td>
+            <td class="border px-4 py-2">{{ $value.Tags }}</td>
+            <td class="border px-4 py-2">
+                <a href="/admin/scans?site={{ $value.ID }}">
+                    {{ $value.LastScannedAt }}
+                </a>
+            </td>
+            <td class="border px-4 py-2">{{ $value.HasGitExposed }}</td>
+            <td class="border px-4 py-2">
+                <a href="/admin/sites/{{ $value.ID }}/trigger">Scan</a>
+                <form method="POST" action="/admin/sites/{{ $value.ID }}">
+                    <input type="hidden" name="_method" value="DELETE" /> 
+                    <button type="submit">X</button>
+                    <input type="hidden" name="csrf" value="{{$.csrf}}" />
+                </form>
+            </td>
+            <td class="border px-4 py-2">{{ $value.UserID }}</td>
+        </tr>
+    {{ end }}
+</table>
+<br />
+{{end}}

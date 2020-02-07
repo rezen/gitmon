@@ -1,0 +1,38 @@
+{{define "head"}}{{end}}
+{{define "content"}}
+{{include "admin/nav"}}
+<table class="table-auto">
+        <thead>
+            <tr>
+                <th>Scanner</th>
+                <th>Url</th>
+                <th>Code</th>
+                <th>Size</th>
+                <th>Title</th>
+                <th>IP</th>
+                <th>When</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+
+        <tbody>
+    {{ range $key, $value := .scans }} 
+        <tr>
+            <td class="border px-4 py-2">
+                <a href="/admin/scans?scanner={{ $value.ScannerID }}">{{ $value.ScannerID }}</a>
+            </td>
+            <td class="border px-4 py-2">
+                <a href="/admin/scans?site={{ $value.SiteID }}">{{ $value.Site.Url }}</a>
+            </td>
+            <td class="border px-4 py-2">{{ $value.StatusCode }}</td>
+            <td class="border px-4 py-2">{{ $value.ResponseSize }}</td>
+            <td class="border px-4 py-2">{{ $value.Title }}</td>
+            <td class="border px-4 py-2">{{ $value.IP }}</td>
+            <td class="border px-4 py-2">{{ $value.CreatedAt }}</td>
+            <td class="border px-4 py-2">{{ index $value.Timings "total_time" }}</td>
+        </tr>
+    {{ end }}
+    </tbody>
+
+</table>
+{{end}}

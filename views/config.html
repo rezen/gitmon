@@ -1,0 +1,29 @@
+{{define "head"}}{{end}}
+{{define "content"}}
+{{include "admin/nav"}}
+{{ .config }}
+{{ .config.Email }}
+<form method="POST" action="/admin/notifications/config">
+    <div>
+        <label>Email</label>
+        <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  type="email" name="email" placeholder="user@example.com" value="{{ .config.Email }}" />
+        <input type="checkbox" name="is_email_enabled" value="1" {{ if .config.IsEmailEnabled  }}checked{{ end }}/>
+
+    </div>    
+    <div>
+        <label for="">Slack</label>
+        <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="url" name="slack" placeholder="https://hooks.slack.com/services/xxxxxxxxx" value="{{ .config.Slack }}" />
+        <input type="checkbox" name="is_slack_enabled" value="1" {{ if .config.IsSlackEnabled  }}checked{{ end }}/>
+
+    </div>
+    <div>
+        <label for="">Pagerduty</label>
+        <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  type="text" name="pagerduty" placeholder="0e1c7df4e1c2df4e1c6df4e1c6da4e1c6df40" value="{{ .config.PagerDuty }}" min="32" max="32" />
+        <input type="checkbox" name="is_pagerduty_enabled" value="1" {{ if .config.IsPagerDutyEnabled  }}checked{{ end }}/>
+    </div>
+    
+
+    <input type="hidden" name="csrf" value="{{.csrf}}" />
+    <button type="submit">Save</button>
+</form>
+{{end}}

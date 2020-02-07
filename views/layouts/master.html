@@ -1,0 +1,22 @@
+
+
+<!-- /views/admin/master.html -->
+<!doctype html>
+
+<html>
+    <head>
+        <title>{{.title}}</title>
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+        {{template "head" .}}
+    </head>
+
+    <body class="text-gray-900 leading-normal">
+        <div class="max-w-4xl mx-auto px-6">
+                {{template "content" .}}
+
+        </div>
+        <hr>
+        {{include "layouts/footer"}}
+    </body>
+</html>

@@ -1,0 +1,16 @@
+{{define "head"}}
+{{end}}
+{{define "content"}}
+    <form method="POST" action="/auth/register">
+        <label for="email">Email</label>
+        <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" name="email" value="{{ .email }}" required />
+
+        <label for="password">Password</label>
+        <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" name="password" value="" required />
+
+        <label for="password_confirm">Confirm Password</label>
+        <input class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" name="password_confirm" value="" required />
+        <input type="hidden" name="csrf" value="{{.csrf}}" />
+        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" type="submit">Register</button>
+    </form>
+{{end}}
